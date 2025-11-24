@@ -46,10 +46,19 @@
                 </div>
             @endif
         </div>
+        {{-- Prévisualisatin Avatar --}}
+
+           @if ($user->avatar)
+           <div class="mt-2">
+            <img src="{{ asset('storage/' . $user->avatar ) }}" alt="{{'Profile de '. $user->name }}"  class="w-20 h-20 rounded-full object-cover" >
+           </div>
+        @endif
 
         <div>
             <x-input-label for="avatar" :value="__('Avatar')" />
-            <input id="avatar" name="avatar" type="file" class="mt-1 block w-full" />
+            <input id="avatar" name="avatar" type="file" class="mt-1 block text-sm w-full border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline:none" />
+                
+        </div>
               <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
     </div>
         <div class="flex items-center gap-4">

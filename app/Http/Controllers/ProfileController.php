@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,15 +27,27 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        dd($request->all());
+      
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
 
+         //Traitement {de l'image de profil
+        if ($request->hasfile('avatar')) {
+            //1. Supprimer l'ancienne image si elle existe
+            if($request->user()->avatar){
+                Storage::disk('public')->delete($request->user()->getOriginal('avatar'));
+            }
+            //2. Stocker la nouvelle image
+            $path = $request->file('avatar')->store(path: 'avatar', options: 'public');
+            
+            //3.Sauvegarder le chemin
+            $request->user()->avatar = $path;
+        }
+ 
         $request->user()->save();
-
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
