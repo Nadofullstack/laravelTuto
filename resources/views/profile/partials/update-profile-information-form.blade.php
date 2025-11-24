@@ -50,7 +50,7 @@
 
            @if ($user->avatar)
            <div class="mt-2">
-            <img src="{{ asset('storage/' . $user->avatar ) }}" alt="{{'Profile de '. $user->name }}"  class="w-20 h-20 rounded-full object-cover" >
+            <img src="{{ asset('storage/' .$user->avatar ) }}" alt="{{'Profile de '. $user->name }}"  class="w-20 h-20 rounded-full object-cover" >
            </div>
         @endif
 

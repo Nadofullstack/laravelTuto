@@ -23,6 +23,11 @@ class Article extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+//Utilisation du slug pour la route
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     protected static function booted()
     {
