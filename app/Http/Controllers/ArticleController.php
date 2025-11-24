@@ -31,7 +31,20 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request)
     {
-        //
+        //1.Récupérer les données validées(excepté l'image)
+        $data = $request->safe()->except(['image']);
+//2.gestion del'image si présente
+        if($request->hasFile('image')){
+            $path = $request->file('image')->store(path: 'articles', options: 'public');
+            //Ajoute le chemin de l'image aux données à sauvegarder
+            $data['image_path'] = $path;
+        }
+        //3. Création de l'article via la relation
+        //cela remplit automatiquement le champ user_id avec l'id de l'utilisateur authentifié
+        $article = $request->user()->articles()->create($data);
+
+        //4. Redirection vers la liste des articles avec message de succès
+        return redirect()->route('articles.index')->with('success', 'Article crée avec succès.');
     }
 
     /**

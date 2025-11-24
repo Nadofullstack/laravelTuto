@@ -4,6 +4,7 @@ namespace App\Models;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Str;
 
 class Article extends Model
 {
@@ -21,5 +22,17 @@ class Article extends Model
 //relation:un article appartient à un utilisateur(auteur)
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    protected static function booted()
+    {
+       parent::boot();
+       //Avant de créer un article, on génère le slug
+         static::creating(function ($article) {
+             if(empty($article->slug)){
+                 $article->slug = Str::slug($article->title);
+             }
+         });
+
     }
 }
