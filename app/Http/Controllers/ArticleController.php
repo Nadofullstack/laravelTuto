@@ -13,7 +13,9 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        //
+        //on récupère les articles du plus récent au plus ancien
+        $articles = Article::where('user_id',auth()->id())->orderBy('created_at','desc')->get();
+        return view('articles.index',compact('articles'));
     }
 
     /**
@@ -21,7 +23,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        //
+        return view('articles.create');
     }
 
     /**
