@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
+
 class ProfileController extends Controller
 {
     /**
@@ -41,14 +42,16 @@ class ProfileController extends Controller
                 Storage::disk('public')->delete($request->user()->getOriginal('avatar'));
             }
             //2. Stocker la nouvelle image
-            $path = $request->file('avatar')->store(path: 'avatar', options: 'public');
+            $path = $request->file('avatar')->store( 'avatars',  'public');
             
             //3.Sauvegarder le chemin
             $request->user()->avatar = $path;
+            $request->user()->save();
         }
- 
-        $request->user()->save();
+           $request->user()->save();
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+
+     
     }
 
     /**
